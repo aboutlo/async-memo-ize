@@ -1,6 +1,9 @@
+import redis from 'redis'
+import bluebird from 'bluebird'
+bluebird.promisifyAll(redis.RedisClient.prototype)
 import RedisCache from '../lib/RedisCache'
 
-describe('RedisCache', function() {
+describe('RedisCache', () => {
   let subject
 
   beforeEach(() => {
@@ -13,6 +16,38 @@ describe('RedisCache', function() {
 
   it('defined', () => {
     expect(RedisCache).to.be.ok
+  })
+
+  describe('constructor', () => {
+
+    it('create without options', () => {
+      const instance = new RedisCache()
+      expect(instance).to.be.instanceOf(RedisCache)
+      expect(instance.client).to.be.instanceOf(redis.RedisClient)
+    })
+
+    it('create with redis params', () => {
+      const instance = new RedisCache(6379, 'localhost')
+      expect(instance).to.be.instanceOf(RedisCache)
+      expect(instance.client).to.be.instanceOf(redis.RedisClient)
+    })
+
+    it('create with redis options', () => {
+      const instance = new RedisCache({
+        host: 'localhost',
+        port: 6379,
+      })
+      expect(instance).to.be.instanceOf(RedisCache)
+      expect(instance.client).to.be.instanceOf(redis.RedisClient)
+    })
+
+    it('create with redis client', () => {
+      const client = redis.createClient()
+      const instance = new RedisCache(client)
+      expect(instance).to.be.instanceOf(RedisCache)
+      expect(instance.client).to.be.instanceOf(redis.RedisClient)
+    })
+
   })
 
   describe('set', () => {
@@ -51,5 +86,9 @@ describe('RedisCache', function() {
       const v = await subject.get('key')
       expect(v).equals(undefined)
     })
+  })
+
+  describe('del', () => {
+
   })
 })

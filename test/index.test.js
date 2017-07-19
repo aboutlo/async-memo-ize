@@ -19,12 +19,17 @@ describe('memoize', function() {
 
   describe('async function with', function () {
 
+    beforeEach(() => {
+      fn = sandbox.spy(async () => Promise.resolve('bar'))
+    })
+
     describe('no args', function() {
       beforeEach(() => {
         fn = sandbox.spy(async () => Promise.resolve('bar'))
       })
 
       it('compute a value', async () => {
+        fn = async () => Promise.resolve('bar')
         const value = await memoize(fn)()
         expect(value).to.be.equals('bar')
       })
@@ -87,13 +92,13 @@ describe('memoize', function() {
       })
 
       it('compute a value', async () => {
-        const value = await memoize(fn, { cache })(args)
+        const value = await memoize(fn, cache)(args)
         expect(value).to.be.equals(42)
         expect(await cache.size()).to.be.equals(1)
       })
 
       it('return a value from the cache', async () => {
-        const memoized = memoize(fn, { cache })
+        const memoized = memoize(fn, cache)
         await memoized(args)
         expect(await memoized(args)).to.be.equals(42)
         expect(fn).have.been.calledOnce
