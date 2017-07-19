@@ -1,5 +1,4 @@
-import memoize from '../lib'
-import SimpleCache from '../lib/SimpleCache'
+import memoize, {SimpleCache} from '../lib'
 
 describe('memoize', function() {
   let fn

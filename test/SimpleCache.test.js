@@ -1,4 +1,4 @@
-import SimpleCache from '../lib/SimpleCache'
+import {SimpleCache} from '../lib'
 
 describe('SimpleCache', function() {
   let subject

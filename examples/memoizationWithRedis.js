@@ -2,8 +2,7 @@ import redis from 'redis'
 import Promise from 'bluebird'
 Promise.promisifyAll(redis.RedisClient.prototype)
 
-import memoize from '../lib'
-import RedisCache from '../lib/RedisCache'
+import memoize, {RedisCache} from '../lib'
 
 const whatsTheAnswerToLifeTheUniverseAndEverything = async (a, b, c) =>
   new Promise(resolve => {
