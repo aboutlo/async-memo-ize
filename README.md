@@ -19,11 +19,11 @@ With this approach I distributed the calculation across all available nodes and 
  
 ## Install
 
-    npm install async-memoize
+    npm install async-memo-ize
 
 or
 
-    yarn add  async-memoize
+    yarn add  async-memo-ize
 
 ## Examples
 

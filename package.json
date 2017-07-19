@@ -1,12 +1,20 @@
 {
-  "name": "async-memoize",
-  "version": "0.0.1",
+  "name": "async-memo-ize",
+  "version": "0.0.2",
   "description": "Simple async memoize utility with cache in memory or via Redis",
   "main": "index.js",
   "repository": "git@github.com:aboutlo/async-memoize.git",
   "author": "Lorenzo Sicilia <lorenzo.sicilia@gmail.com>",
-  "engines": {"node" : ">=8.0.0"},
-  "keywords": ["memoize", "memoization", "async", "cache", "u"],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "keywords": [
+    "memoize",
+    "memoization",
+    "async",
+    "cache",
+    "u"
+  ],
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -20,6 +28,7 @@
   },
   "scripts": {
     "build": "babel -d build src",
+    "publish": "npm publish",
     "start": "node -r babel-register lib/",
     "test": "mocha --require ./test/bootstrap.js test/ --recursive --compilers js:babel-register",
     "watch": "mocha --require ./test/bootstrap.js test/ --recursive -w --compilers js:babel-register"
