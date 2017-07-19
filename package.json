@@ -1,0 +1,31 @@
+{
+  "name": "async-memoize",
+  "version": "0.0.1",
+  "description": "An async memoize utility with cache plugins (e.g. InMemory, Redis)",
+  "main": "index.js",
+  "repository": "git@github.com:aboutlo/async-memoize.git",
+  "author": "Lorenzo Sicilia <lorenzo.sicilia@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "^1.6.0",
+    "chai": "^4.1.0",
+    "mocha": "^3.4.2",
+    "prettier": "^1.5.3",
+    "sinon": "^2.3.8",
+    "sinon-chai": "^2.11.0"
+  },
+  "scripts": {
+    "build": "babel -d build src",
+    "start": "node -r babel-register lib/",
+    "test": "mocha --require ./test/bootstrap.js test/ --recursive --compilers js:babel-register",
+    "watch": "mocha --require ./test/bootstrap.js test/ --recursive -w --compilers js:babel-register"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0"
+  },
+  "peerDependencies": {
+    "redis": "^2.7.1"
+  }
+}

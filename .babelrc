@@ -1,0 +1,10 @@
+{
+  "plugins": [ "add-module-exports" ],
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "8.1.4"
+      }
+    }]
+  ]
+}
