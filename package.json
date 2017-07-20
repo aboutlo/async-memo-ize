@@ -1,7 +1,7 @@
 {
   "name": "async-memo-ize",
-  "version": "0.0.7",
-  "description": "Simple async memoize utility with cache in memory or via Redis",
+  "version": "0.0.8",
+  "description": "Simple memoize utility ideal for functions with async/await syntax and promises. It supports cache in memory or via Redis",
   "main": "build/index.js",
   "repository": "git@github.com:aboutlo/async-memoize.git",
   "author": "Lorenzo Sicilia <lorenzo.sicilia@gmail.com>",
@@ -10,10 +10,12 @@
   },
   "keywords": [
     "memoize",
-    "memoization",
+    "promise",
     "async",
+    "await",
     "cache",
-    "u"
+    "memoization",
+    "redis"
   ],
   "license": "MIT",
   "devDependencies": {
