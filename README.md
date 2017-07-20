@@ -1,4 +1,4 @@
-# README
+# Async Memoize
 
 > In computing, memoization or memoisation is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again
 > — Wikipedia
@@ -11,11 +11,12 @@ Use cases covered:
 
 **Notice:** sync function can be used too
 
-I did this project mainly for fun and because I hit the second use case in a real project. 
+### Real project use case 
 
-A docker cluster with multiple nodejs compute a calculation avery day for each user 
-The calculation is adjusted using the data from the last 90 days. 
-With this approach I distributed the calculation across all available nodes and I avoided to crunch again the previous days data 
+A docker cluster with multiple NodeJs nodes compute a calculation every day for each user 
+The calculation is incremental using the data from the last 90 days. 
+With this approach, the computation can be distributed across all the nodes available. 
+It avoids crunching data from the previous days again and again.  
  
 ## Install
 
@@ -25,85 +26,95 @@ or
 
     yarn add  async-memo-ize
 
-## Examples
-
-### Multiple calls
+## Usage
 
 ```js
-import memoize from 'async-memoize'
+import memoize from 'async-memo-ize'
+import sleep from 'sleep-promise';
 
-const whatsTheAnswerToLifeTheUniverseAndEverything = async (one, two, three) => new Promise(resolve => {
-  setTimeout(function(){
-    console.log('done!')
-    resolve([1, 2, 3].reduce((memo, current) => (memo + current),0)
-  },2000)
-})
-
-const example = async () => {
-  const memoized = memoize(whatsTheAnswerToLifeTheUniverseAndEverything)
-  // first call
-  console.time('compute first');
-  console.log('doSomething:', await memoized('foo', 3, 'bar'))
-  console.timeEnd('compute first');
-
-  // another call
-  console.time('again')
-  console.log('doSomething Again:', await memoized('foo', 3, 'bar'))
-  console.timeEnd('again')
+const whatsTheAnswerToLifeTheUniverseAndEverything = async () => {
+     await sleep(2000);
+     return Promise.resolve(42)
 }
+const memoized = memoize(whatsTheAnswerToLifeTheUniverseAndEverything)
 
-export default example()
+const answer = await memoized() // wait 2 seconds 
+const quickAnswer = await memoized() // wait ms  
 ```
 
-### Multiple calls from different node with a shared cache
- 
-```js
-    import redis from 'redis'
-    import Promise from 'bluebird'
-    Promise.promisifyAll(redis.RedisClient.prototype)
-    
-    import memoize from 'async-memoize'
-    import {RedisCache} from 'async-memoize'
-    
-    const whatsTheAnswerToLifeTheUniverseAndEverything = async (a, b, c) =>
-      new Promise(resolve => {
-        setTimeout(function() {
-          console.log('done with redis')
-          resolve([1, 21, 20].reduce((memo, current) => memo + current, 0))
-        }, 2000)
-      })
-    
-    const example = async () => {
-      const cache = new RedisCache()
-      const memoized = memoize(whatsTheAnswerToLifeTheUniverseAndEverything, cache)
-      // first call
-      console.time('compute first')
-      console.log('doSomething:', await memoized('foo', 3, 'bar'))
-      console.timeEnd('compute first')
-    
-      // next 100 calls
-      return Promise.map(
-        Array.from({ length: 10 }),
-        async (item, index) => {
-          console.time(`call ${index}`)
-          try {
-            const result = await memoized('foo', 3, 'bar')
-            console.timeEnd(`call ${index}`)
-            return result
-          }catch(e) {
-            console.log(e)
-          }
-        },
-        { concurrency: 1 }
-      ).catch(e => {
-        console.log(e)
-      }).then(() => {
-        console.log('finish')
-      })
-    }
-    
-    export default example()
+## Cache
 
+### In Memory
+
+A simple in memory async cache based on native js Map is provided.
+
+### Usage
+
+```js
+import memoize, {SimpleCache} from 'async-memo-ize'
+
+const fn = async () => Promise.resolve(42)
+const memoized = memoize(fn, new SimpleCache)
+
+const answer = await memoized() // wait ms  
+```
+
+You can provide your own implementation given the below interface:
+
+```
+class SimpleCache {
+
+  async has(key) {
+    ...
+  }
+
+  async get(key) {
+    ...
+  }
+
+  async set(key, value) {
+    ...
+  }
+
+  async del(key) {
+    ...
+  }
+
+  async entries() {
+    ...
+  }
+
+  async size() {
+    ...
+  }
+}
+```
+
+### Redis
+If you want delegate and share the cache you can use RedisCache. 
+The generated `key` is based on the function args and his name 
+
+Given:
+```
+const doSomething = async (a, b) => Promise.resolve(a+b)
+
+```
+The key generated:
+
+```
+["doSomething",1,5]
+```
+
+It means multiple nodejs instances can share the calculation  
+
+### Usage
+```js
+import memoize, {RedisCache} from 'async-memo-ize'
+
+const fn = async () => Promise.resolve(42)
+const memoized = memoize(fn, new RedisCache())
+
+const answer = await memoized() // wait ms  
 ```
 
 ## test
@@ -117,4 +128,5 @@ export default example()
     yarn test
 
 # TODO
-- redis cache double check the return type of array and object
+- Redis cache double check the return type of array and object
+- Remove bluebird dependency
