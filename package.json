@@ -1,12 +1,12 @@
 {
   "name": "async-memo-ize",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Simple async memoize utility with cache in memory or via Redis",
   "main": "build/index.js",
   "repository": "git@github.com:aboutlo/async-memoize.git",
   "author": "Lorenzo Sicilia <lorenzo.sicilia@gmail.com>",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=6.0.0"
   },
   "keywords": [
     "memoize",
