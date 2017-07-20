@@ -1,6 +1,5 @@
 # Async Memoize
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/aboutlo/async-memo-ize.svg)](https://greenkeeper.io/)
+[![npm version](https://badge.fury.io/js/async-memo-ize.svg)](https://badge.fury.io/js/async-memo-ize) [![CircleCI](https://circleci.com/gh/aboutlo/async-memo-ize/tree/master.svg?style=shield)](https://circleci.com/gh/aboutlo/async-memo-ize/tree/master) [![Greenkeeper badge](https://badges.greenkeeper.io/aboutlo/async-memo-ize.svg)](https://greenkeeper.io/)
 
 > In computing, memoization or memoisation is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again
 > — Wikipedia
@@ -129,5 +128,3 @@ const answer = await memoized() // wait ms
 
     yarn test
 
-# TODO
-- Remove bluebird dependency
