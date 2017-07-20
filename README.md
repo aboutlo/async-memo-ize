@@ -105,7 +105,7 @@ The key generated:
 ["doSomething",1,5]
 ```
 
-It means multiple nodejs instances can share the calculation  
+It means multiple nodejs instances can share the value computed if the function name and the args match.  
 
 ### Usage
 ```js
@@ -128,5 +128,4 @@ const answer = await memoized() // wait ms
     yarn test
 
 # TODO
-- Redis cache double check the return type of array and object
 - Remove bluebird dependency
