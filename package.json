@@ -34,7 +34,7 @@
     "watch": "mocha --require ./test/bootstrap.js test/ --recursive -w --compilers js:babel-register",
     "postinstall": "npm run build"
   },
-  "peerDependencies": {
+  "dependencies": {
     "redis": "^2.7.1"
   }
 }
