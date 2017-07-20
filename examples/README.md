@@ -8,6 +8,6 @@ Simple Memoization
 
 Memoization with redis
  
-node -r babel-register examples/memoizationWithRedis.js
+    node -r babel-register examples/memoizationWithRedis.js
 
 

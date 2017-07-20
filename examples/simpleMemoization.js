@@ -1,5 +1,4 @@
 import memoize from '../lib'
-import Promise from 'bluebird'
 
 const whatsTheAnswerToLifeTheUniverseAndEverything = async (a, b, c) =>
   new Promise(resolve => {
@@ -17,16 +16,14 @@ const example = async () => {
   console.timeEnd('compute first')
 
   // next 100 calls
-  Promise.map(
-    Array.from({ length: 100 }),
-    async (item, index) => {
-      console.time(`call ${index}`)
-      const result = await memoized('foo', 3, 'bar')
-      console.timeEnd(`call ${index}`)
-      return result
-    },
-    { concurrency: 1 }
-  )
+  const promises = Array.from({ length: 100 }).map(async (item, index) => {
+    console.time(`call ${index}`)
+    const result = await memoized('foo', 3, 'bar')
+    console.timeEnd(`call ${index}`)
+    return result
+  })
+
+  return Promise.all(promises)
 }
 
 export default example()
