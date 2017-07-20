@@ -1,6 +1,6 @@
 {
   "name": "async-memo-ize",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Simple async memoize utility with cache in memory or via Redis",
   "main": "build/index.js",
   "repository": "git@github.com:aboutlo/async-memoize.git",
@@ -29,10 +29,6 @@
   "scripts": {
     "build": "babel -d build lib/",
     "publish": "npm publish",
-    "push": "yarn test && git push origin HEAD",
-    "release:patch": "yarn version patch && yarn run push",
-    "release:minor": "yarn version minor && yarn run push",
-    "release:major": "yarn version major && yarn run push",
     "start": "node -r babel-register lib/",
     "test": "mocha --require ./test/bootstrap.js test/ --recursive --compilers js:babel-register",
     "watch": "mocha --require ./test/bootstrap.js test/ --recursive -w --compilers js:babel-register",
