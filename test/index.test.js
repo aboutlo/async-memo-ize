@@ -130,5 +130,25 @@ describe('memoize', function() {
 
   })
 
+  describe('callback function with', function() {
+
+    let callback
+
+    beforeEach(() => {
+      callback = sandbox.spy()
+      fn = sandbox.spy((callback) => callback())
+    })
+
+    describe('no args', function() {
+
+      it('calls the callback', async () => {
+        await memoize(fn)(callback)
+        expect(callback).have.been.calledOnce
+      })
+
+    })
+
+  })
+
 
 })
