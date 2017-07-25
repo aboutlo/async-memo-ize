@@ -3,7 +3,8 @@ import ora from 'ora'
 import logger from 'logdown'
 import Table from 'cli-table2'
 import fastMemoize from 'fast-memoize'
-import asyncMemoize from '../lib'
+import memoizee from 'memoizee'
+import asyncMemoize from '../build'
 
 const debug = logger('')
 const results = []
@@ -56,7 +57,8 @@ const fibonacciAsync = async (n) => {
 
 const fibNumber = 15
 
-const memoizedFastMemoize = fastMemoize(fibonacci)
+const memoizedWithFastMemoize = fastMemoize(fibonacci)
+const memoizedWithMemoizee = memoizee(fibonacciAsync, { promise: 'then' });
 const syncMemoized = asyncMemoize(fibonacci)
 const asyncMemoized = asyncMemoize(fibonacciAsync)
 
@@ -70,7 +72,10 @@ benchmark
     fibonacciAsync(fibNumber)
   })
   .add(`fast-memoize`, () => {
-    memoizedFastMemoize(fibNumber)
+    memoizedWithFastMemoize(fibNumber)
+  })
+  .add(`Memoizee`, () => {
+    memoizedWithMemoizee(fibNumber)
   })
   .add(`async-memo-ize sync`, () => {
     syncMemoized(fibNumber)
