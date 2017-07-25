@@ -48,7 +48,12 @@ describe('memoize', function() {
         fn = sandbox.spy(async arg => Promise.resolve(arg))
       })
 
-      it('compute a value', async () => {
+      it('compute a primitive value', async () => {
+        const value = await memoize(fn)(arg)
+        expect(value).to.be.equals('foo')
+      })
+
+      it.skip('compute a complex value (e.g. array, object)', async () => {
         const value = await memoize(fn)(arg)
         expect(value).to.be.equals('foo')
       })
