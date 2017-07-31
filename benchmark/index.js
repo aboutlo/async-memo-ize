@@ -52,36 +52,39 @@ const fibonacci = (n) => {
 }
 
 const fibonacciAsync = async (n) => {
-  return n < 2 ? Promise.resolve(n) : Promise.resolve(fibonacciAsync(n - 1) + fibonacciAsync(n - 2))
+  return n < 2 ? n : fibonacciAsync(n - 1) + fibonacciAsync(n - 2)
 }
 
 const fibNumber = 15
 
 const memoizedWithFastMemoize = fastMemoize(fibonacci)
-const memoizedWithMemoizee = memoizee(fibonacciAsync, { promise: 'then' });
 const syncMemoized = asyncMemoize(fibonacci)
+const memoizedWithMemoizee = memoizee(fibonacciAsync, { promise: 'then' });
 const asyncMemoized = asyncMemoize(fibonacciAsync)
 
 const benchmark = new Benchmark.Suite()
 
 benchmark
-  .add('vanilla', () => {
-    fibonacci(fibNumber)
+  /*.add('vanilla async', {
+    'defer': true,
+    'fn': async deferred => {
+      await fibonacciAsync(fibNumber)
+      deferred.resolve()
+    }
+  })*/
+  .add(`Memoizee`, {
+    'defer': true,
+    'fn': async deferred => {
+      await memoizedWithMemoizee(fibNumber)
+      deferred.resolve()
+    }
   })
-  .add('vanilla async', () => {
-    fibonacciAsync(fibNumber)
-  })
-  .add(`fast-memoize`, () => {
-    memoizedWithFastMemoize(fibNumber)
-  })
-  .add(`Memoizee`, () => {
-    memoizedWithMemoizee(fibNumber)
-  })
-  .add(`async-memo-ize sync`, () => {
-    syncMemoized(fibNumber)
-  })
-  .add(`async-memo-ize async`, () => {
-    asyncMemoized(fibNumber)
+  .add(`async-memo-ize`, {
+    'defer': true,
+    'fn': async deferred => {
+      await asyncMemoized(fibNumber)
+      deferred.resolve()
+    }
   })
   .on('cycle', onCycle)
   .on('complete', onComplete)

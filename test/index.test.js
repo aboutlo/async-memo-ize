@@ -39,6 +39,13 @@ describe('memoize', function() {
         expect(await memoized()).to.be.equals('bar')
         expect(fn).have.been.calledOnce
       })
+
+      it.only('return a value from pending cache', async () => {
+        const memoized = memoize(fn)
+        const p1 = memoized()
+        expect(memoized()).to.be.equals(p1)
+        expect(fn).have.been.calledOnce
+      })
     })
 
     describe('one arg', function() {
