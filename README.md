@@ -35,7 +35,7 @@ import sleep from 'sleep-promise';
 
 const whatsTheAnswerToLifeTheUniverseAndEverything = async () => {
      await sleep(2000);
-     return Promise.resolve(42)
+     return 42
 }
 const memoized = memoize(whatsTheAnswerToLifeTheUniverseAndEverything)
 
@@ -97,7 +97,7 @@ The generated `key` is based on the function args and his name
 
 Given:
 ```
-const doSomething = async (a, b) => Promise.resolve(a+b)
+const doSomething = async (a, b) => a+b
 
 ```
 The key generated:
@@ -112,7 +112,7 @@ It means multiple nodejs instances can share the value computed if the function 
 ```js
 import memoize, {RedisCache} from 'async-memo-ize'
 
-const fn = async () => Promise.resolve(42)
+const fn = async () => 42
 const memoized = memoize(fn, new RedisCache())
 
 const answer = await memoized() // wait ms  
@@ -127,4 +127,11 @@ const answer = await memoized() // wait ms
 ### run
 
     yarn test
+
+## TODO
+
+### create a benchmark using express and micro
+### use https://github.com/rsms/js-lru as lru cache
+### move to lerna 
+### remove redis dependency and create a specific package
 

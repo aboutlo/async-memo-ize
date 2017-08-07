@@ -39,6 +39,13 @@ describe('memoize', function() {
         expect(await memoized()).to.be.equals('bar')
         expect(fn).have.been.calledOnce
       })
+
+      it.skip('return a value from pending cache', async () => {
+        const memoized = memoize(fn)
+        const p1 = memoized()
+        expect(memoized()).to.be.equals(p1)
+        expect(fn).have.been.calledOnce
+      })
     })
 
     describe('one arg', function() {
@@ -48,7 +55,12 @@ describe('memoize', function() {
         fn = sandbox.spy(async arg => Promise.resolve(arg))
       })
 
-      it('compute a value', async () => {
+      it('compute a primitive value', async () => {
+        const value = await memoize(fn)(arg)
+        expect(value).to.be.equals('foo')
+      })
+
+      it.skip('compute a complex value (e.g. array, object)', async () => {
         const value = await memoize(fn)(arg)
         expect(value).to.be.equals('foo')
       })
