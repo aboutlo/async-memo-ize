@@ -40,7 +40,7 @@ describe('memoize', function() {
         expect(fn).have.been.calledOnce
       })
 
-      it.only('return a value from pending cache', async () => {
+      it.skip('return a value from pending cache', async () => {
         const memoized = memoize(fn)
         const p1 = memoized()
         expect(memoized()).to.be.equals(p1)
