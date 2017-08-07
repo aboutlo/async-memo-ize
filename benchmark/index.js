@@ -5,6 +5,8 @@ import Table from 'cli-table2'
 import fastMemoize from 'fast-memoize'
 import memoizee from 'memoizee'
 import asyncMemoize from '../build'
+import express from 'express'
+import axios from 'axios'
 
 const debug = logger('')
 const results = []
@@ -47,42 +49,64 @@ spinner.start()
 // Benchmark
 //
 
+const request = path => axios.get(path)
+const fibNumber = 20
+
 const fibonacci = (n) => {
   return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2)
 }
 
 const fibonacciAsync = async (n) => {
-  return n < 2 ? n : fibonacciAsync(n - 1) + fibonacciAsync(n - 2)
+  return n < 2
+    ? n
+    : await fibonacciAsync(n - 1) + await fibonacciAsync(n - 2)
 }
 
-const fibNumber = 15
-
-const memoizedWithFastMemoize = fastMemoize(fibonacci)
-const syncMemoized = asyncMemoize(fibonacci)
-const memoizedWithMemoizee = memoizee(fibonacciAsync, { promise: 'then' });
+const asyncMemoizedWithMemoizee = memoizee(fibonacciAsync, { promise: 'then' });
 const asyncMemoized = asyncMemoize(fibonacciAsync)
+
+const app = express()
+// app.get('/vanilla', (req, res) => res.send(JSON.stringify(fibonacci(fibNumber))))
+app.get('/vanilla', async (req, res) => {
+  const num = await fibonacciAsync(fibNumber)
+  res.send(JSON.stringify(num))
+})
+// app.get('/fast-memoize', (req, res) => res.send(JSON.stringify(memoizedWithFastMemoize(fibNumber))))
+app.get('/memoizee', async (req, res) => {
+  const num = await asyncMemoizedWithMemoizee(fibNumber)
+  res.send(JSON.stringify(num))
+})
+// app.get('/async-memo-ize/sync', (req, res) => res.send(JSON.stringify(syncMemoized(fibNumber))))
+app.get('/async-memo-ize', async (req, res) => {
+  const num = await asyncMemoized(fibNumber)
+  res.send(JSON.stringify(num))
+})
+
+app.listen(3000, function() {
+  console.log('Express running on port 3000')
+})
 
 const benchmark = new Benchmark.Suite()
 
 benchmark
-  /*.add('vanilla async', {
+  .add('vanilla async', {
     'defer': true,
     'fn': async deferred => {
-      await fibonacciAsync(fibNumber)
+      await request('http://localhost:3000/vanilla')
       deferred.resolve()
     }
-  })*/
+  })
   .add(`Memoizee`, {
     'defer': true,
     'fn': async deferred => {
-      await memoizedWithMemoizee(fibNumber)
+      await request('http://localhost:3000/memoizee')
       deferred.resolve()
     }
   })
   .add(`async-memo-ize`, {
     'defer': true,
     'fn': async deferred => {
-      await asyncMemoized(fibNumber)
+      await request('http://localhost:3000/async-memo-ize')
       deferred.resolve()
     }
   })
