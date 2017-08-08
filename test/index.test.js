@@ -46,6 +46,11 @@ describe('memoize', function() {
         expect(memoized()).to.be.equals(p1)
         expect(fn).have.been.calledOnce
       })
+
+      it('rejects anonymous function', () => {
+        // WORKAROUND wrap memoize into a clojure in order to get to.throw working
+        expect(() => memoize(() => 'anonymous')).to.throw('Anonymous functions are not supported')
+      })
     })
 
     describe('one arg', function() {
