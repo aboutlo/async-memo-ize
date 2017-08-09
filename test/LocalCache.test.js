@@ -1,10 +1,10 @@
-import {SimpleCache} from '../lib'
+import {LocalCache} from '../lib'
 
-describe('SimpleCache', function() {
+describe('LocalCache', function() {
   let subject
 
   beforeEach(() => {
-    subject = new SimpleCache()
+    subject = new LocalCache()
   })
 
   afterEach(() => {
@@ -12,16 +12,16 @@ describe('SimpleCache', function() {
   })
 
   it('defined', () => {
-    expect(SimpleCache).to.be.ok
+    expect(LocalCache).to.be.ok
   })
 
   describe('constructor', () => {
     it('without args', () => {
-      expect(new SimpleCache()).to.be.ok
+      expect(new LocalCache()).to.be.ok
     })
 
     it('with max size', () => {
-      expect(new SimpleCache({max: 5})).to.be.ok
+      expect(new LocalCache({max: 5})).to.be.ok
     })
   })
 

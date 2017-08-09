@@ -52,10 +52,10 @@ A simple in memory async cache based on native js Map is provided.
 ### Usage
 
 ```js
-import memoize, {SimpleCache} from 'async-memo-ize'
+import memoize, {LocalCache} from 'async-memo-ize'
 
 const fn = async () => Promise.resolve(42)
-const memoized = memoize(fn, new SimpleCache)
+const memoized = memoize(fn, new LocalCache)
 
 const answer = await memoized() // wait ms  
 ```
@@ -63,7 +63,7 @@ const answer = await memoized() // wait ms
 You can provide your own implementation given the below interface:
 
 ```
-class SimpleCache {
+class LocalCache {
 
   async has(key) {
     ...
@@ -130,8 +130,6 @@ const answer = await memoized() // wait ms
 
 ## TODO
 
-### Add RedisCache Benchmark
-### use SimpleCache with RedisCache in order to interact with redis every time
 ### move to lerna
 ### remove redis dependency and create a specific package
 ### Calculate a safe default for SimpleCache max

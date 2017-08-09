@@ -1,5 +1,5 @@
 import redis from 'redis'
-import {RedisCache} from '../lib'
+import {RedisCache, LocalCache} from '../lib'
 
 describe('RedisCache', () => {
   let subject
@@ -12,7 +12,7 @@ describe('RedisCache', () => {
   afterEach(async () => {
     await subject.del(key)
     subject = undefined
-    return
+    return true
   })
 
   it('defined', () => {
@@ -37,9 +37,11 @@ describe('RedisCache', () => {
       const instance = new RedisCache({
         host: 'localhost',
         port: 6379,
+        localCache: new LocalCache()
       })
       expect(instance).to.be.instanceOf(RedisCache)
       expect(instance.client).to.be.instanceOf(redis.RedisClient)
+
     })
 
     it('create with redis client', () => {
@@ -47,6 +49,20 @@ describe('RedisCache', () => {
       const instance = new RedisCache(client)
       expect(instance).to.be.instanceOf(RedisCache)
       expect(instance.client).to.be.instanceOf(redis.RedisClient)
+    })
+
+    it('create with localCache', () => {
+      const instance = new RedisCache(new LocalCache())
+      expect(instance).to.be.instanceOf(RedisCache)
+      expect(instance.client).to.be.instanceOf(redis.RedisClient)
+      expect(instance.localCache).to.be.instanceOf(LocalCache)
+    })
+
+    it('create with localCache and redis port and host', () => {
+      const instance = new RedisCache(6379, 'localhost', new LocalCache())
+      expect(instance).to.be.instanceOf(RedisCache)
+      expect(instance.client).to.be.instanceOf(redis.RedisClient)
+      expect(instance.localCache).to.be.instanceOf(LocalCache)
     })
 
   })
@@ -73,16 +89,18 @@ describe('RedisCache', () => {
   })
 
   describe('get', () => {
-    it('an existing value', async () => {
+    it('a string', async () => {
       const value = 'v'
       await subject.set(key, value)
       const v = await subject.get(key)
       expect(v).equals(value)
     })
 
-    it('a missing value', async () => {
-      const v = await subject.get('key')
-      expect(v).equals(undefined)
+    it('a number', async () => {
+      const value = 1
+      await subject.set(key, value)
+      const v = await subject.get(key)
+      expect(v).equals(value)
     })
 
     it('a boolean', async () => {
@@ -125,6 +143,11 @@ describe('RedisCache', () => {
       await subject.set(key, value)
       const v = await subject.get(key)
       expect(v).to.be.deep.equals(value)
+    })
+
+    it('a missing value', async () => {
+      const v = await subject.get('key')
+      expect(v).equals(undefined)
     })
   })
 

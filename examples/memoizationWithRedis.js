@@ -1,5 +1,3 @@
-import redis from 'redis'
-
 import memoize, { RedisCache } from '../lib'
 
 const whatsTheAnswerToLifeTheUniverseAndEverything = async (a, b, c) =>

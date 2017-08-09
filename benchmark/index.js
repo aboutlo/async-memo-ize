@@ -2,9 +2,8 @@ import Benchmark from 'benchmark'
 import ora from 'ora'
 import logger from 'logdown'
 import Table from 'cli-table2'
-import fastMemoize from 'fast-memoize'
 import memoizee from 'memoizee'
-import asyncMemoize from '../build'
+import asyncMemoize, { RedisCache } from '../build'
 import express from 'express'
 import axios from 'axios'
 
@@ -35,9 +34,10 @@ function onCycle (event) {
   ora(event.target.name).succeed()
 }
 
-function onComplete () {
+function onComplete (cache) {
   spinner.stop()
   debug.log()
+  cache.del('fibonacciAsync,20')
 
   const orderedBenchmarkResults = sortDescResults(results)
   showResults(orderedBenchmarkResults)
@@ -64,25 +64,33 @@ const fibonacciAsync = async (n) => {
 
 const asyncMemoizedWithMemoizee = memoizee(fibonacciAsync, { promise: 'then' });
 const asyncMemoized = asyncMemoize(fibonacciAsync)
+// const asyncMemoizedWithRedis = asyncMemoize(fibonacciAsync, new RedisCache())
+const redisCache = new RedisCache()
+const asyncMemoizedWithRedis = asyncMemoize(fibonacciAsync, redisCache)
 
-const app = express()
+const app1 = express()
 // app.get('/vanilla', (req, res) => res.send(JSON.stringify(fibonacci(fibNumber))))
-app.get('/vanilla', async (req, res) => {
+app1.get('/vanilla', async (req, res) => {
   const num = await fibonacciAsync(fibNumber)
   res.send(JSON.stringify(num))
 })
 // app.get('/fast-memoize', (req, res) => res.send(JSON.stringify(memoizedWithFastMemoize(fibNumber))))
-app.get('/memoizee', async (req, res) => {
+app1.get('/memoizee', async (req, res) => {
   const num = await asyncMemoizedWithMemoizee(fibNumber)
   res.send(JSON.stringify(num))
 })
 // app.get('/async-memo-ize/sync', (req, res) => res.send(JSON.stringify(syncMemoized(fibNumber))))
-app.get('/async-memo-ize', async (req, res) => {
+app1.get('/async-memo-ize', async (req, res) => {
   const num = await asyncMemoized(fibNumber)
   res.send(JSON.stringify(num))
 })
 
-app.listen(3000, function() {
+app1.get('/async-memo-ize/redis', async (req, res) => {
+  const num = await asyncMemoizedWithRedis(fibNumber)
+  res.send(JSON.stringify(num))
+})
+
+app1.listen(3000, function() {
   console.log('Express running on port 3000')
 })
 
@@ -110,6 +118,18 @@ benchmark
       deferred.resolve()
     }
   })
+  .add(`async-memo-ize with Redis`, {
+    'defer': true,
+    'fn': async deferred => {
+      try{
+        await request('http://localhost:3000/async-memo-ize/redis')
+      }catch(e) {
+        console.log('error', e)
+      }
+
+      deferred.resolve()
+    }
+  })
   .on('cycle', onCycle)
-  .on('complete', onComplete)
+  .on('complete', onComplete.bind(undefined, redisCache))
   .run({'async': true})
