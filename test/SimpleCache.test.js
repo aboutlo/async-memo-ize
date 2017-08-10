@@ -15,14 +15,54 @@ describe('SimpleCache', function() {
     expect(SimpleCache).to.be.ok
   })
 
+  describe('constructor', () => {
+    it('without args', () => {
+      expect(new SimpleCache()).to.be.ok
+    })
+
+    it('with max size', () => {
+      expect(new SimpleCache({max: 5})).to.be.ok
+    })
+  })
+
   describe('set', () => {
     it('a value', async () => {
       const value = 'v'
       const key = 'k'
-      const entry = await subject.set(key, value)
-      const [k, v] = entry.entries().next().value
-      expect(k).to.be.equals(key)
-      expect(v).to.be.equals(value)
+      await subject.set(key, value)
+      const read = await subject.get(key)
+      expect(read).to.be.equals(value)
+
+    })
+  })
+
+  describe('size', () => {
+    it('returns the current cache size', async () => {
+      const value = 'v'
+      const key = 'k'
+      await subject.set(key, value)
+      expect(await subject.size()).to.be.equals(1)
+
+    })
+  })
+
+  describe('clear', () => {
+    it('remove all the entries', async () => {
+      const value = 'v'
+      const key = 'k'
+      await subject.set(key, value)
+      await subject.clear()
+      expect(await subject.size()).to.be.equals(0)
+
+    })
+  })
+
+  describe('entries', () => {
+    it('returns all entries', async () => {
+      await subject.set('foo', 1)
+      await subject.set('bar', 2)
+      const entries = [...await subject.entries()]
+      expect(entries).to.be.lengthOf(2)
 
     })
   })

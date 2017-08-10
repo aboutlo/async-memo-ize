@@ -122,7 +122,7 @@ const answer = await memoized() // wait ms
 
 ### prerequisites
 
-    docker run --name cache-redis -d -p 6379:6379 redis:alpine  
+    docker run -d -p 6379:6379 redis:alpine  
 
 ### run
 
@@ -130,8 +130,14 @@ const answer = await memoized() // wait ms
 
 ## TODO
 
-### create a benchmark using express and micro
-### use https://github.com/rsms/js-lru as lru cache
-### move to lerna 
+### Add RedisCache Benchmark
+### use SimpleCache with RedisCache in order to interact with redis every time
+### move to lerna
 ### remove redis dependency and create a specific package
+### Calculate a safe default for SimpleCache max
+ 
+Get -max_old_space_size
 
+    echo console.log(process.argv.splice(2)) > index.js
+    node index.js --max_old_space_size -expose_gc
+     
