@@ -1,4 +1,4 @@
-import memoize, {SimpleCache} from '../lib'
+import memoize, {LocalCache} from '../lib'
 
 describe('memoize', function() {
   let fn
@@ -104,7 +104,7 @@ describe('memoize', function() {
 
       beforeEach(() => {
         fn = sandbox.spy(async args => Promise.resolve(42))
-        cache = new SimpleCache()
+        cache = new LocalCache()
       })
 
       it('compute a value', async () => {
