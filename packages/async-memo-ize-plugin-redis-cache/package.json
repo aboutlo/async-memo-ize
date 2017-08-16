@@ -2,7 +2,7 @@
   "name": "async-memo-ize-plugin-redis-cache",
   "version": "0.1.1",
   "description": "Async Redis cache",
-  "main": "lib/index.js",
+  "main": "build/index.js",
   "author": "Lorenzo Sicilia",
   "license": "MIT",
   "engines": {
