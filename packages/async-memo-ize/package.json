@@ -1,6 +1,6 @@
 {
   "name": "async-memo-ize",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Simple memoize utility ideal for functions with async/await syntax and promises. It supports cache in memory or via Redis",
   "main": "build/index.js",
   "repository": "git@github.com:aboutlo/async-memo-ize.git",
@@ -42,7 +42,7 @@
     "start": "node -r babel-register lib/",
     "test": "mocha --require ./test/bootstrap.js test/ --recursive --compilers js:babel-register",
     "watch": "mocha --require ./test/bootstrap.js test/ --recursive -w --compilers js:babel-register",
-    "postinstall": "npm run build"
+    "prepublish": "yarn run build"
   },
   "dependencies": {
     "lru_map": "^0.3.3",
