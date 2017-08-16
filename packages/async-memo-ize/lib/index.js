@@ -1,8 +1,6 @@
 import {LocalCache} from './LocalCache'
-import {RedisCache} from './RedisCache'
 
 export {
-  RedisCache,
   LocalCache,
 }
 

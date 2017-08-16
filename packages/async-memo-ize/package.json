@@ -6,7 +6,7 @@
   "repository": "git@github.com:aboutlo/async-memo-ize.git",
   "author": "Lorenzo Sicilia <lorenzo.sicilia@gmail.com>",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=7.0.0"
   },
   "keywords": [
     "memoize",
@@ -45,7 +45,6 @@
     "prepublish": "yarn run build"
   },
   "dependencies": {
-    "lru_map": "^0.3.3",
-    "redis": "^2.7.1"
+    "lru_map": "^0.3.3"
   }
 }
