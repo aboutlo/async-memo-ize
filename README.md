@@ -100,7 +100,7 @@ If you want delegate and share the cache between NodeJs instances you can use Re
 
 ```js
 import memoize from 'async-memo-ize'
-import {RedisCache} from 'async-memo-ize-plugin-redis-cache'
+import RedisCache from 'async-memo-ize-plugin-redis-cache'
 
 const fn = async () => 42
 const memoized = memoize(fn, new RedisCache())
