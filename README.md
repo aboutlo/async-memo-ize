@@ -118,21 +118,24 @@ const memoized = memoize(fn, new RedisCache())
 const answer = await memoized() // wait ms  
 ```
 
-## test
+## Test
 
-### prerequisites
+### Prerequisites
 
     docker run -d -p 6379:6379 redis:alpine  
 
-### run
+### Run
 
     yarn test
 
-## TODO
+## Release
 
-### move to lerna
-### remove redis dependency and create a specific package
-### Calculate a safe default for SimpleCache max
+    lerna publish
+
+
+## TODO
+- Remove redis dependency and create a specific package
+- Calculate a safe default for SimpleCache max
  
 Get -max_old_space_size
 

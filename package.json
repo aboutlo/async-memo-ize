@@ -1,51 +1,5 @@
 {
-  "name": "async-memo-ize",
-  "version": "0.0.12",
-  "description": "Simple memoize utility ideal for functions with async/await syntax and promises. It supports cache in memory or via Redis",
-  "main": "build/index.js",
-  "repository": "git@github.com:aboutlo/async-memo-ize.git",
-  "author": "Lorenzo Sicilia <lorenzo.sicilia@gmail.com>",
-  "engines": {
-    "node": ">=6.0.0"
-  },
-  "keywords": [
-    "memoize",
-    "promise",
-    "async",
-    "await",
-    "cache",
-    "memoization",
-    "redis"
-  ],
-  "license": "MIT",
-  "devDependencies": {
-    "axios": "^0.16.2",
-    "babel-cli": "^6.24.1",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-env": "^1.6.0",
-    "benchmark": "^2.1.4",
-    "chai": "^4.1.0",
-    "cli-table2": "^0.2.0",
-    "express": "^4.15.3",
-    "fast-memoize": "^2.2.7",
-    "logdown": "^3.0.2",
-    "memoizee": "^0.4.5",
-    "mocha": "^3.4.2",
-    "ora": "^1.3.0",
-    "prettier": "^1.5.3",
-    "sinon": "^3.1.0",
-    "sinon-chai": "^2.11.0"
-  },
-  "scripts": {
-    "build": "babel -d build lib/",
-    "benchmark": "yarn build && node -r babel-register benchmark",
-    "start": "node -r babel-register lib/",
-    "test": "mocha --require ./test/bootstrap.js test/ --recursive --compilers js:babel-register",
-    "watch": "mocha --require ./test/bootstrap.js test/ --recursive -w --compilers js:babel-register",
-    "postinstall": "npm run build"
-  },
-  "dependencies": {
-    "lru_map": "^0.3.3",
-    "redis": "^2.7.1"
-  }
+	"devDependencies": {
+		"lerna": "^2.0.0"
+	}
 }
