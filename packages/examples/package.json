@@ -7,6 +7,12 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "async-memo-ize": "^0.1.0"
+    "async-memo-ize": "^0.1.0",
+    "async-memo-ize-plugin-redis-cache": "^0.1.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "^1.6.0"
   }
 }

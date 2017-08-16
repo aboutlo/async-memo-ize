@@ -33,7 +33,6 @@ function getKey(fn, params) {
 }
 
 const memoizer = async (...args) => {
-  // TODO throw an error or warning if anonymous function is passed aka fn.name === ''
   const [fn, cache] = args
   const params = args.splice(2)
   const key = getKey(fn, params)
