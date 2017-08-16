@@ -19,7 +19,7 @@ jobs:
     steps:
       - checkout
 
-      # memoizer
+      # core
       - run: |
           cd packages/async-memo-ize
           yarn install
