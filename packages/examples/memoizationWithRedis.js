@@ -1,4 +1,5 @@
-import memoize, { RedisCache } from '../lib'
+import memoize from 'async-memo-ize'
+import RedisCache from 'async-memo-ize-plugin-redis-cache'
 
 const whatsTheAnswerToLifeTheUniverseAndEverything = async (a, b, c) =>
   new Promise(resolve => {

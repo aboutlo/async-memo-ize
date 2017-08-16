@@ -1,4 +1,4 @@
-import memoize from '../lib'
+import memoize from 'async-memo-ize'
 
 const whatsTheAnswerToLifeTheUniverseAndEverything = async (a, b, c) =>
   new Promise(resolve => {

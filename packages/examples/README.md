@@ -4,10 +4,10 @@
 
 Simple Memoization
 
-    node -r babel-register examples/simpleMemoization.js
+    node -r babel-register simpleMemoization.js
 
 Memoization with redis
  
-    node -r babel-register examples/memoizationWithRedis.js
+    node -r babel-register memoizationWithRedis.js
 
 

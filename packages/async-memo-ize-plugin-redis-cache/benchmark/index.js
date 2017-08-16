@@ -2,8 +2,8 @@ import Benchmark from 'benchmark'
 import ora from 'ora'
 import logger from 'logdown'
 import Table from 'cli-table2'
-import memoizee from 'memoizee'
-import asyncMemoize from '../build'
+import asyncMemoize from 'async-memo-ize'
+import RedisCache from '../build'
 import express from 'express'
 import axios from 'axios'
 
@@ -34,9 +34,10 @@ function onCycle (event) {
   ora(event.target.name).succeed()
 }
 
-function onComplete () {
+function onComplete (cache) {
   spinner.stop()
   debug.log()
+  cache.del('fibonacciAsync,20')
 
   const orderedBenchmarkResults = sortDescResults(results)
   showResults(orderedBenchmarkResults)
@@ -61,21 +62,19 @@ const fibonacciAsync = async (n) => {
     : await fibonacciAsync(n - 1) + await fibonacciAsync(n - 2)
 }
 
-const asyncMemoizedWithMemoizee = memoizee(fibonacciAsync, { promise: 'then' });
 const asyncMemoized = asyncMemoize(fibonacciAsync)
+const redisCache = new RedisCache()
+const asyncMemoizedWithRedis = asyncMemoize(fibonacciAsync, redisCache)
 
 const app1 = express()
-app1.get('/vanilla', async (req, res) => {
-  const num = await fibonacciAsync(fibNumber)
-  res.send(JSON.stringify(num))
-})
-app1.get('/memoizee', async (req, res) => {
-  const num = await asyncMemoizedWithMemoizee(fibNumber)
-  res.send(JSON.stringify(num))
-})
-// app.get('/async-memo-ize/sync', (req, res) => res.send(JSON.stringify(syncMemoized(fibNumber))))
-app1.get('/async-memo-ize', async (req, res) => {
+
+app1.get('/without-redis', async (req, res) => {
   const num = await asyncMemoized(fibNumber)
+  res.send(JSON.stringify(num))
+})
+
+app1.get('/with-redis', async (req, res) => {
+  const num = await asyncMemoizedWithRedis(fibNumber)
   res.send(JSON.stringify(num))
 })
 
@@ -86,27 +85,25 @@ app1.listen(3000, function() {
 const benchmark = new Benchmark.Suite()
 
 benchmark
-  .add('vanilla async', {
+  .add(`with redis`, {
     'defer': true,
     'fn': async deferred => {
-      await request('http://localhost:3000/vanilla')
+      await request('http://localhost:3000/with-redis')
       deferred.resolve()
     }
   })
-  .add(`Memoizee`, {
+  .add(`without Redis`, {
     'defer': true,
     'fn': async deferred => {
-      await request('http://localhost:3000/memoizee')
-      deferred.resolve()
-    }
-  })
-  .add(`async-memo-ize`, {
-    'defer': true,
-    'fn': async deferred => {
-      await request('http://localhost:3000/async-memo-ize')
+      try{
+        await request('http://localhost:3000/without-redis')
+      }catch(e) {
+        console.log('error', e)
+      }
+
       deferred.resolve()
     }
   })
   .on('cycle', onCycle)
-  .on('complete', onComplete)
+  .on('complete', onComplete.bind(undefined, redisCache))
   .run({'async': true})

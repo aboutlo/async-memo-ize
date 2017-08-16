@@ -49,7 +49,7 @@ const quickAnswer = await memoized() // wait ms
 
 A simple in memory async cache based on native js Map is provided.
 
-### Usage
+#### Usage
 
 ```js
 import memoize, {LocalCache} from 'async-memo-ize'
@@ -92,8 +92,24 @@ class LocalCache {
 ```
 
 ### Redis
-If you want delegate and share the cache you can use RedisCache. 
-The generated `key` is based on the function args and his name 
+If you want delegate and share the cache between NodeJs instances you can use RedisCache.
+
+    yarn install async-memo-ize-plugin-redis cache 
+
+#### Usage
+
+```js
+import memoize from 'async-memo-ize'
+import {RedisCache} from 'async-memo-ize-plugin-redis-cache'
+
+const fn = async () => 42
+const memoized = memoize(fn, new RedisCache())
+
+const anser = await memoized()
+```
+**Notice**
+ 
+The `key` name, serialized on Redis, is based on the function args and his name. 
 
 Given:
 ```
@@ -106,17 +122,7 @@ The key generated:
 ["doSomething",1,5]
 ```
 
-It means multiple nodejs instances can share the value computed if the function name and the args match.  
-
-### Usage
-```js
-import memoize, {RedisCache} from 'async-memo-ize'
-
-const fn = async () => 42
-const memoized = memoize(fn, new RedisCache())
-
-const answer = await memoized() // wait ms  
-```
+It means multiple NodeJs instances can share the value computed if the function name and the args match.  
 
 ## Test
 
@@ -134,11 +140,11 @@ const answer = await memoized() // wait ms
 
 
 ## TODO
-- Remove redis dependency and create a specific package
-- Calculate a safe default for SimpleCache max
- 
-Get -max_old_space_size
+- Calculate at runtime a safe default for SimpleCache max
+- Decide if or not to implement .entries() and .size on RedisCache 
 
+Reminder for SimpleCache max
+
+    -max_old_space_size
     echo console.log(process.argv.splice(2)) > index.js
     node index.js --max_old_space_size -expose_gc
-     
