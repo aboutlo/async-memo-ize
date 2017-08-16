@@ -21,11 +21,11 @@ jobs:
 
       # memoizer
       - run: |
-          cd packages/memoizer
+          cd packages/async-memo-ize
           yarn install
 
       - run: |
-          cd packages/memoizer
+          cd packages/async-memo-ize
           yarn test
 
 
