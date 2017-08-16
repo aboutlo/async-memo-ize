@@ -1,5 +1,5 @@
 import redis from 'redis'
-import {LocalCache} from './LocalCache'
+import {LocalCache} from 'async-memo-ize'
 
 // only the second arg is serialized
 const valueSerializer = (arg, i) => i === 1 ? JSON.stringify(arg) : arg
@@ -131,4 +131,4 @@ class RedisCache {
   }
 }
 
-export { RedisCache }
+export default RedisCache

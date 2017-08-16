@@ -1,0 +1,31 @@
+{
+  "name": "async-memo-ize-plugin-redis-cache",
+  "version": "0.0.1",
+  "description": "Async Redis cache",
+  "main": "lib/index.js",
+  "author": "Lorenzo Sicilia",
+  "license": "MIT",
+  "engines": {
+    "node": ">=7.0.0"
+  },
+  "scripts": {
+    "build": "babel -d build lib/",
+    "benchmark": "yarn build && node -r babel-register benchmark",
+    "start": "node -r babel-register lib/",
+    "test": "mocha --require ./test/bootstrap.js test/ --recursive --compilers js:babel-register",
+    "watch": "mocha --require ./test/bootstrap.js test/ --recursive -w --compilers js:babel-register",
+    "prepublish": "yarn run build"
+  },
+  "dependencies": {
+    "async-memo-ize": "^0.0.14"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "^1.6.0",
+    "chai": "^4.1.1",
+    "mocha": "^3.5.0",
+    "sinon": "^3.2.0",
+    "sinon-chai": "^2.13.0"
+  }
+}

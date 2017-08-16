@@ -1,5 +1,6 @@
 import redis from 'redis'
-import {RedisCache, LocalCache} from '../lib'
+import RedisCache from '../lib'
+import {LocalCache} from 'async-memo-ize'
 
 describe('RedisCache', () => {
   let subject

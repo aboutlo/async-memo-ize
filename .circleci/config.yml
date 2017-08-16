@@ -28,5 +28,14 @@ jobs:
           cd packages/async-memo-ize
           yarn test
 
+      # plugin redis-cache
+      - run: |
+          cd packages/async-memo-ize-plugin-redis-cache
+          yarn install
+
+      - run: |
+          cd packages/async-memo-ize-plugin-redis-cache
+          yarn test
+
 
 
