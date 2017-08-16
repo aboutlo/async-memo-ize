@@ -1,6 +1,6 @@
 {
   "name": "async-memo-ize-plugin-redis-cache",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Async Redis cache",
   "main": "lib/index.js",
   "author": "Lorenzo Sicilia",
@@ -17,7 +17,7 @@
     "prepublish": "yarn run build"
   },
   "dependencies": {
-    "async-memo-ize": "^0.0.14"
+    "async-memo-ize": "^0.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

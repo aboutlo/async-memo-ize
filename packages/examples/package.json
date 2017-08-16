@@ -1,0 +1,12 @@
+{
+  "name": "examples",
+  "version": "0.1.1",
+  "description": "Async-memo-ize examples",
+  "main": "index.js",
+  "author": "Lorenzo Sicilia",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "async-memo-ize": "^0.1.0"
+  }
+}
