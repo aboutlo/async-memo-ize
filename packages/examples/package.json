@@ -1,14 +1,14 @@
 {
   "name": "examples",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Async-memo-ize examples",
   "main": "index.js",
   "author": "Lorenzo Sicilia",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "async-memo-ize": "^0.1.0",
-    "async-memo-ize-plugin-redis-cache": "^0.1.2"
+    "async-memo-ize": "^0.1.1",
+    "async-memo-ize-plugin-redis-cache": "^0.1.3"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

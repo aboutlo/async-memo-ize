@@ -1,6 +1,6 @@
 {
   "name": "async-memo-ize",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple memoize utility ideal for functions with async/await syntax and promises. It supports cache in memory or via Redis",
   "main": "build/index.js",
   "repository": "git@github.com:aboutlo/async-memo-ize.git",
