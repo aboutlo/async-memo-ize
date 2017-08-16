@@ -49,7 +49,7 @@ const quickAnswer = await memoized() // wait ms
 
 A simple in memory async cache based on native js Map is provided.
 
-### Usage
+#### Usage
 
 ```js
 import memoize, {LocalCache} from 'async-memo-ize'
@@ -96,18 +96,8 @@ If you want delegate and share the cache between NodeJs instances you can use Re
 
     yarn install async-memo-ize-plugin-redis cache 
 
-Usage
+#### Usage
 
-```js
-    import memoize from 'async-memo-ize'
-    import {RedisCache} from 'async-memo-ize-plugin-redis-cache'
-    
-    const cache = new RedisCache()
-    const memoized = memoize(whatsTheAnswerToLifeTheUniverseAndEverything, cache)
-    console.log(memoized())
-```
-
-### Usage
 ```js
 import memoize from 'async-memo-ize'
 import {RedisCache} from 'async-memo-ize-plugin-redis-cache'
@@ -115,7 +105,7 @@ import {RedisCache} from 'async-memo-ize-plugin-redis-cache'
 const fn = async () => 42
 const memoized = memoize(fn, new RedisCache())
 
-const result = await memoized()
+const anser = await memoized()
 ```
 **Notice**
  
