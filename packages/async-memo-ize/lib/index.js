@@ -36,7 +36,6 @@ const memoizer = async (...args) => {
   const [fn, cache, id] = args
   const params = args.splice(3)
   const key = generateKey(id, fn, params)
-  console.log('key:', key)
   const promise = isPromise(fn) ? fn : toPromise(fn)
   // console.log('cacheKey:', key)
   // TODO check if promise is pending (sync)
