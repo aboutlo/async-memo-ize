@@ -94,7 +94,7 @@ class LocalCache {
 ### Redis
 If you want delegate and share the cache between NodeJs instances you can use RedisCache.
 
-    yarn install async-memo-ize-plugin-redis cache 
+    yarn install async-memo-ize-plugin-redis-cache 
 
 #### Usage
 

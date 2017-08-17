@@ -1,9 +1,9 @@
-import {LRUMap} from 'lru_map'
+import { LRUMap } from 'lru_map'
 
 class LocalCache {
   // TODO calculate a better max default based on available memory
-  constructor(options = {max: Infinity}) {
-    const {max} = options
+  constructor(options = { max: Infinity }) {
+    const { max } = options
     // console.log('max:', max)
     this.client = new LRUMap(max)
   }

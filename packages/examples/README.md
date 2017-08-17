@@ -1,13 +1,17 @@
 # EXAMPLES
 
-## run
+## NodeJS
 
-Simple Memoization
+    yarn run start:node:local
 
-    node -r babel-register simpleMemoization.js
-
-Memoization with redis
+## NodeJS with redis
  
-    node -r babel-register memoizationWithRedis.js
+    yarn run start:node:redis
+    
+## Browser
+
+    yarn start
+
+
 
 
