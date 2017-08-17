@@ -1,19 +1,20 @@
 import redis from 'redis'
-import {LocalCache} from 'async-memo-ize'
+import { LocalCache } from 'async-memo-ize'
 
 // only the second arg is serialized
-const valueSerializer = (arg, i) => i === 1 ? JSON.stringify(arg) : arg
-const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{2,}Z$/;
+const valueSerializer = (arg, i) => (i === 1 ? JSON.stringify(arg) : arg)
+const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{2,}Z$/
 
 const reviver = (key, value) => {
-  if (typeof value === "string" && dateFormat.test(value)) {
-    return new Date(value);
+  if (typeof value === 'string' && dateFormat.test(value)) {
+    return new Date(value)
   }
-  return value;
+  return value
 }
-const omit = (obj, props) => Object.entries(obj)
-  .filter(([key]) => !props.includes(key))
-  .reduce((memo, [key, val]) => Object.assign(memo, { [key]: val }), {});
+const omit = (obj, props) =>
+  Object.entries(obj)
+    .filter(([key]) => !props.includes(key))
+    .reduce((memo, [key, val]) => Object.assign(memo, { [key]: val }), {})
 
 /**
  * new RedisCache()
@@ -42,7 +43,11 @@ class RedisCache {
     } else if (args[0] instanceof LocalCache) {
       this.localCache = args[0]
       this.client = redis.createClient.apply(redis, args.splice(1))
-    } else if (args[0] instanceof Object && !args[0] instanceof redis.RedisClient && args.length === 1 ) {
+    } else if (
+      args[0] instanceof Object &&
+      !args[0] instanceof redis.RedisClient &&
+      args.length === 1
+    ) {
       this.localCache = args.localCache
       const redisOptions = omit(args, ['localCache'])
       this.client = redis.createClient(redisOptions)
@@ -50,7 +55,6 @@ class RedisCache {
       this.client = redis.createClient.apply(redis, args)
       this.localCache = new LocalCache()
     }
-
 
     this.client.on('error', function(err) {
       console.log('Error ' + err)
@@ -76,7 +80,7 @@ class RedisCache {
       return has
     }
     return new Promise((resolve, reject) => {
-      this.client.exists(key, (err, reply)=> {
+      this.client.exists(key, (err, reply) => {
         if (err) reject(err)
         return resolve(reply === 1)
       })
@@ -90,7 +94,7 @@ class RedisCache {
       return JSON.parse(localValue, reviver)
     }
     return new Promise((resolve, reject) => {
-      this.client.get(key, (err, value)=> {
+      this.client.get(key, (err, value) => {
         if (err) reject(err)
         return resolve(value === null ? undefined : JSON.parse(value, reviver))
       })
@@ -103,7 +107,7 @@ class RedisCache {
     // only the second arg (value) is serialized
     const args = Array.from(arguments).map(valueSerializer)
     const [key, value] = args
-    await this.localCache.set(key,value)
+    await this.localCache.set(key, value)
     return new Promise((resolve, reject) => {
       this.client.set(...args, (err, reply) => {
         if (err) return reject(err)
@@ -118,7 +122,7 @@ class RedisCache {
       this.client.del(key, (err, reply) => {
         if (err) return reject(err)
         return resolve(reply)
-      } )
+      })
     })
   }
 

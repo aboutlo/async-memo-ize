@@ -8,11 +8,22 @@
   "private": true,
   "dependencies": {
     "async-memo-ize": "^0.1.1",
-    "async-memo-ize-plugin-redis-cache": "^0.1.3"
+    "async-memo-ize-plugin-redis-cache": "^0.1.3",
+    "axios": "^0.16.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-env": "^1.6.0"
+    "babel-preset-env": "^1.6.0",
+    "css-loader": "^0.28.5",
+    "html-webpack-plugin": "^2.30.1",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.5.5"
+  },
+  "scripts": {
+    "start": "yarn build && open build/index.html",
+    "start:node:local": "node -r babel-register src/node.js",
+    "start:node:redis": "node -r babel-register src/nodewithredis.js",
+    "build": "webpack"
   }
 }
