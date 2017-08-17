@@ -1,16 +1,14 @@
-import {LocalCache} from './LocalCache'
+import { LocalCache } from './LocalCache'
 
-export {
-  LocalCache,
-}
+export { LocalCache }
 
 const toPromise = function(fn) {
   return function() {
     const args = Array.from(arguments)
     return new Promise((resolve, reject) => {
-      try{
+      try {
         return resolve(fn.apply(null, args))
-      }catch(e) {
+      } catch (e) {
         return reject(e)
       }
     })
@@ -18,7 +16,8 @@ const toPromise = function(fn) {
 }
 
 const isPromise = p => typeof p.then === 'function'
-const isPrimitive = arg => arg === null || arg === undefined || (typeof arg !== 'function' && typeof arg !== 'object')
+const isPrimitive = arg =>
+  arg === null || arg === undefined || (typeof arg !== 'function' && typeof arg !== 'object')
 
 function getKey(fn, params) {
   switch (params.length) {
@@ -26,7 +25,7 @@ function getKey(fn, params) {
       return fn.name
     case 1:
       const arg = params[0]
-      return isPrimitive(arg)? `${fn.name},${arg}` : JSON.stringify([fn.name].concat(params))
+      return isPrimitive(arg) ? `${fn.name},${arg}` : JSON.stringify([fn.name].concat(params))
     default:
       return JSON.stringify([fn.name].concat(params))
   }
@@ -40,7 +39,7 @@ const memoizer = async (...args) => {
   // console.log('cacheKey:', key)
   // TODO check if promise is pending (sync)
   const exist = await cache.has(key)
-  if (!exist ) {
+  if (!exist) {
     const computedValue = await promise.apply(undefined, params)
     await cache.set(key, computedValue)
     return computedValue
