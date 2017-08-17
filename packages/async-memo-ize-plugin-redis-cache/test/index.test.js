@@ -52,6 +52,13 @@ describe('RedisCache', () => {
       expect(instance.client).to.be.instanceOf(redis.RedisClient)
     })
 
+    it('create with redis url', () => {
+      const client = redis.createClient('redis://localhost:6379')
+      const instance = new RedisCache(client)
+      expect(instance).to.be.instanceOf(RedisCache)
+      expect(instance.client).to.be.instanceOf(redis.RedisClient)
+    })
+
     it('create with localCache', () => {
       const instance = new RedisCache(new LocalCache())
       expect(instance).to.be.instanceOf(RedisCache)
