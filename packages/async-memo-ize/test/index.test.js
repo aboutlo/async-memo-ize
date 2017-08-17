@@ -47,9 +47,9 @@ describe('memoize', function() {
         expect(fn).have.been.calledOnce
       })
 
-      it('rejects anonymous function', () => {
-        // WORKAROUND wrap memoize into a clojure in order to get to.throw working
-        expect(() => memoize(() => 'anonymous')).to.throw('Anonymous functions are not supported')
+      it('handle anonymous function', async () => {
+        const value = await memoize(async () => 'bar', {id: 'foo'})()
+        expect(value).to.be.equals('bar')
       })
     })
 
@@ -108,13 +108,13 @@ describe('memoize', function() {
       })
 
       it('compute a value', async () => {
-        const value = await memoize(fn, cache)(args)
+        const value = await memoize(fn, {cache})(args)
         expect(value).to.be.equals(42)
         expect(await cache.size()).to.be.equals(1)
       })
 
       it('return a value from the cache', async () => {
-        const memoized = memoize(fn, cache)
+        const memoized = memoize(fn, {cache})
         await memoized(args)
         expect(await memoized(args)).to.be.equals(42)
         expect(fn).have.been.calledOnce

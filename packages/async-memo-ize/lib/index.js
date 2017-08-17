@@ -19,22 +19,24 @@ const isPromise = p => typeof p.then === 'function'
 const isPrimitive = arg =>
   arg === null || arg === undefined || (typeof arg !== 'function' && typeof arg !== 'object')
 
-function getKey(fn, params) {
+function generateKey(id, fn, params) {
+  const prefix = fn.name || id
   switch (params.length) {
     case 0:
-      return fn.name
+      return prefix
     case 1:
       const arg = params[0]
-      return isPrimitive(arg) ? `${fn.name},${arg}` : JSON.stringify([fn.name].concat(params))
+      return isPrimitive(arg) ? `${prefix},${arg}` : JSON.stringify([prefix].concat(params))
     default:
-      return JSON.stringify([fn.name].concat(params))
+      return JSON.stringify([prefix].concat(params))
   }
 }
 
 const memoizer = async (...args) => {
-  const [fn, cache] = args
-  const params = args.splice(2)
-  const key = getKey(fn, params)
+  const [fn, cache, id] = args
+  const params = args.splice(3)
+  const key = generateKey(id, fn, params)
+  console.log('key:', key)
   const promise = isPromise(fn) ? fn : toPromise(fn)
   // console.log('cacheKey:', key)
   // TODO check if promise is pending (sync)
@@ -48,8 +50,9 @@ const memoizer = async (...args) => {
   return cache.get(key)
 }
 
-export default (fn, cache) => {
-  if (fn.name === '') throw new Error('Anonymous functions are not supported')
+export default (fn, options = {}) => {
+  const {id, cache} = options
+  if (fn.name === '' && !id) throw new Error(`Anonymous functions are not supported. Pass an id as option to identify the function. e.g. memoize(async () => 'bar', {id: 'foo'})`)
   const cacheClient = cache || new LocalCache()
-  return memoizer.bind(this, fn, cacheClient)
+  return memoizer.bind(this, fn, cacheClient, id)
 }
