@@ -111,62 +111,6 @@ class LocalCache {
 }
 ```
 
-### Redis
-If you want delegate and share the cache between NodeJs instances you can use RedisCache.
+## Plugins
 
-    yarn install async-memo-ize-plugin-redis-cache 
-
-#### Usage
-
-```js
-import memoize from 'async-memo-ize'
-import RedisCache from 'async-memo-ize-plugin-redis-cache'
-
-const fn = async () => 42
-const memoized = memoize(fn, new RedisCache())
-
-const anser = await memoized()
-```
-**Notice**
- 
-The `key` name, serialized on Redis, is based on the named function args and his name. 
-
-Given:
-```
-const doSomething = async (a, b) => a+b
-
-```
-The key generated:
-
-```
-["doSomething",1,5]
-```
-
-It means multiple NodeJs instances can share the value computed if the function name and the args match.
-If you prefer to use an anonymous function it is required to pass an `id` as option  
-
-## Test
-
-### Prerequisites
-
-    docker run -d -p 6379:6379 redis:alpine  
-
-### Run
-
-    yarn test
-
-## Release
-
-    lerna publish
-
-
-## TODO
-- Calculate at runtime a safe default for SimpleCache max
-- Decide if or not to implement .entries() and .size on RedisCache
-- Evaluate to create an ES5 compatible version 
-
-Reminder for SimpleCache max
-
-    -max_old_space_size
-    echo console.log(process.argv.splice(2)) > index.js
-    node index.js --max_old_space_size -expose_gc
+- [RedisCache](https://github.com/aboutlo/async-memo-ize/tree/master/packages/async-memo-ize-plugin-redis-cache) Distributed cache across functions and NodeJs instances 
