@@ -1,14 +1,14 @@
 {
   "name": "examples",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Async-memo-ize examples",
   "main": "index.js",
   "author": "Lorenzo Sicilia",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "async-memo-ize": "^0.1.4",
-    "async-memo-ize-plugin-redis-cache": "^0.1.6",
+    "async-memo-ize": "^0.1.5",
+    "async-memo-ize-plugin-redis-cache": "^0.1.7",
     "axios": "^0.16.2"
   },
   "devDependencies": {
