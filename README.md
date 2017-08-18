@@ -14,10 +14,10 @@ Use cases covered:
 
 ### Real project use case 
 
-A docker cluster with multiple NodeJs nodes compute a calculation every day for each user 
+A NodeJS cluster computes a calculation every day for each user. 
 The calculation is incremental using the data from the last 90 days. 
-With this approach, the computation can be distributed across all the nodes available. 
-It avoids crunching data from the previous days again and again.  
+With this approach, the calculus can be distributed across all the available nodes, and the results are shared among them via a distributed cache (e.g. Redis)
+So that, it isn't necessary crunching data from the previous days again and again.  
  
 ## Install
 
@@ -29,6 +29,7 @@ or
 
 ## Usage
 
+Named functions
 ```js
 import memoize from 'async-memo-ize'
 import sleep from 'sleep-promise';
@@ -42,6 +43,25 @@ const memoized = memoize(whatsTheAnswerToLifeTheUniverseAndEverything)
 const answer = await memoized() // wait 2 seconds 
 const quickAnswer = await memoized() // wait ms  
 ```
+
+Anonymous functions
+
+```js
+import memoize from 'async-memo-ize'
+import sleep from 'sleep-promise';
+
+const whatsTheAnswerToLifeTheUniverseAndEverything = memoize(async () => {
+                                                                  await sleep(2000);
+                                                                  return 42
+                                                             }, {id: 'whatsTheAnswerToLifeTheUniverseAndEverything'})
+
+const answer = await whatsTheAnswerToLifeTheUniverseAndEverything() // wait 2 seconds 
+const quickAnswer = await whatsTheAnswerToLifeTheUniverseAndEverything() // wait ms  
+```
+
+If you prefer to memoize anonymous function, you have to pass a unique `id`. 
+The `id` is used to generate the cache `key` and it is required to share the same cache across multiple memoized functions. 
+Named functions don't need because the lib rely on `fn.name` as `id`   
 
 ## Cache
 
@@ -141,7 +161,8 @@ It means multiple NodeJs instances can share the value computed if the function 
 
 ## TODO
 - Calculate at runtime a safe default for SimpleCache max
-- Decide if or not to implement .entries() and .size on RedisCache 
+- Decide if or not to implement .entries() and .size on RedisCache
+- Evaluate to create an ES5 compatible version 
 
 Reminder for SimpleCache max
 
