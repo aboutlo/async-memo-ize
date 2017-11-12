@@ -17,7 +17,9 @@ const toPromise = function(fn) {
 
 const isPromise = p => typeof p.then === 'function'
 const isPrimitive = arg =>
-  arg === null || arg === undefined || (typeof arg !== 'function' && typeof arg !== 'object')
+  arg === null ||
+  arg === undefined ||
+  (typeof arg !== 'function' && typeof arg !== 'object')
 
 function generateKey(id, fn, params) {
   const prefix = fn.name || id
@@ -26,32 +28,51 @@ function generateKey(id, fn, params) {
       return prefix
     case 1:
       const arg = params[0]
-      return isPrimitive(arg) ? `${prefix},${arg}` : JSON.stringify([prefix].concat(params))
+      return isPrimitive(arg)
+        ? `${prefix},${arg}`
+        : JSON.stringify([prefix].concat(params))
     default:
       return JSON.stringify([prefix].concat(params))
   }
 }
 
 const memoizer = async (...args) => {
-  const [fn, cache, id] = args
-  const params = args.splice(3)
+  const [fn, cache, id, queue] = args
+  const params = args.splice(4)
   const key = generateKey(id, fn, params)
   const promise = isPromise(fn) ? fn : toPromise(fn)
   // console.log('cacheKey:', key)
-  // TODO check if promise is pending (sync)
-  const exist = await cache.has(key)
-  if (!exist) {
-    const computedValue = await promise.apply(undefined, params)
-    await cache.set(key, computedValue)
-    return computedValue
-  }
-  // console.log('cache hit')
-  return cache.get(key)
+  const value = await cache.get(key)
+  const pending = queue.has(key)
+  return new Promise(async (resolve, reject) => {
+    if (!value && !pending) {
+      queue.set(key, [])
+      const computedValue = await promise.apply(undefined, params)
+
+      await cache.set(key, computedValue)
+
+      return Promise.all(
+        queue.get(key).map(f => f.call(undefined, computedValue))
+      )
+        .then(() => queue.delete(key))
+        .then(() => resolve(computedValue))
+    }
+    if (pending) {
+      const listeners = queue.get(key)
+      queue.set(key, [resolve].concat(listeners))
+    }
+    if (value) return resolve(value)
+  })
 }
 
 export default (fn, options = {}) => {
-  const {id, cache} = options
-  if (fn.name === '' && !id) throw new Error(`Anonymous functions are not supported. Pass an id as option to identify the function. e.g. memoize(async () => 'bar', {id: 'foo'})`)
+  const { id, cache } = options
+  if (fn.name === '' && !id)
+    throw new Error(`
+      Anonymous functions are not supported. 
+      Pass an id as option to identify the function. 
+      e.g. memoize(async () => 'bar', {id: 'foo'})`)
   const cacheClient = cache || new LocalCache()
-  return memoizer.bind(this, fn, cacheClient, id)
+  const queue = new Map()
+  return memoizer.bind(this, fn, cacheClient, id, queue)
 }
