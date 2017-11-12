@@ -1,4 +1,4 @@
-import memoize, {LocalCache} from '../lib'
+import memoize, { LocalCache } from '../lib'
 
 describe('memoize', function() {
   let fn
@@ -16,8 +16,7 @@ describe('memoize', function() {
     expect(memoize).to.be.ok
   })
 
-  describe('async function with', function () {
-
+  describe('async function with', function() {
     beforeEach(() => {
       fn = sandbox.spy(async () => Promise.resolve('bar'))
     })
@@ -40,15 +39,28 @@ describe('memoize', function() {
         expect(fn).have.been.calledOnce
       })
 
-      it.skip('return a value from pending cache', async () => {
+      it('return a value once the pending queue has been resolved', async () => {
+        fn = sandbox.spy(
+          async () =>
+            new Promise((resolve, reject) => {
+              setTimeout(resolve('bar'), 200)
+            })
+        )
         const memoized = memoize(fn)
-        const p1 = memoized()
-        expect(memoized()).to.be.equals(p1)
-        expect(fn).have.been.calledOnce
+        return Promise.all([
+          memoized(),
+          memoized(),
+          memoized(),
+          memoized(),
+          memoized(),
+        ]).then(async results => {
+          results.map(res => expect(res).to.be.equals('bar'))
+          expect(fn).have.been.calledOnce
+        })
       })
 
       it('handle anonymous function', async () => {
-        const value = await memoize(async () => 'bar', {id: 'foo'})()
+        const value = await memoize(async () => 'bar', { id: 'foo' })()
         expect(value).to.be.equals('bar')
       })
     })
@@ -108,30 +120,27 @@ describe('memoize', function() {
       })
 
       it('compute a value', async () => {
-        const value = await memoize(fn, {cache})(args)
+        const value = await memoize(fn, { cache })(args)
         expect(value).to.be.equals(42)
         expect(await cache.size()).to.be.equals(1)
       })
 
       it('return a value from the cache', async () => {
-        const memoized = memoize(fn, {cache})
+        const memoized = memoize(fn, { cache })
         await memoized(args)
         expect(await memoized(args)).to.be.equals(42)
         expect(fn).have.been.calledOnce
         expect(await cache.size()).to.be.equals(1)
       })
     })
-
   })
 
   describe('sync function with', function() {
-
     beforeEach(() => {
       fn = sandbox.spy(() => 'bar')
     })
 
     describe('no args', function() {
-
       it('compute a value', async () => {
         const value = await memoize(fn)()
         expect(value).to.be.equals('bar')
@@ -144,28 +153,21 @@ describe('memoize', function() {
         expect(fn).have.been.calledOnce
       })
     })
-
   })
 
   describe('callback function with', function() {
-
     let callback
 
     beforeEach(() => {
       callback = sandbox.spy()
-      fn = sandbox.spy((callback) => callback())
+      fn = sandbox.spy(callback => callback())
     })
 
     describe('no args', function() {
-
       it('calls the callback', async () => {
         await memoize(fn)(callback)
         expect(callback).have.been.calledOnce
       })
-
     })
-
   })
-
-
 })
