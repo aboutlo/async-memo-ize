@@ -7,8 +7,9 @@
 This library makes async function, aka Promises, first class citizen with memoization
 
 Use cases covered:
-1) An expensive function call (eg. API calls, intensive CPU calculations, etc) 
-2) Multiple nodejs instances with a centralized cache (eg. Redis)
+1) An expensive function call (eg. API calls, intensive CPU calculations, etc)
+2) Simultaneous multiple calls are handled by a queue so that the expensive function is invoked once. 
+3) Multiple NodeJs instances with a centralized cache (eg. Redis)
 
 **Notice:** sync function can be used too
 
@@ -67,7 +68,7 @@ Named functions don't need because the lib rely on `fn.name` as `id`
 
 ### In Memory
 
-A simple in memory async cache based on native js Map is provided.
+An async cache based on [LRUMap](https://github.com/rsms/js-lru) is provided.
 
 #### Usage
 
