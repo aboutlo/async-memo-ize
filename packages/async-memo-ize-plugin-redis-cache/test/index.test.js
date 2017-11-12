@@ -1,6 +1,6 @@
 import redis from 'redis'
 import RedisCache from '../lib'
-import {LocalCache} from 'async-memo-ize'
+import { LocalCache } from 'async-memo-ize'
 
 describe('RedisCache', () => {
   let subject
@@ -21,7 +21,6 @@ describe('RedisCache', () => {
   })
 
   describe('constructor', () => {
-
     it('create without options', () => {
       const instance = new RedisCache()
       expect(instance).to.be.instanceOf(RedisCache)
@@ -38,11 +37,10 @@ describe('RedisCache', () => {
       const instance = new RedisCache({
         host: 'localhost',
         port: 6379,
-        localCache: new LocalCache()
+        localCache: new LocalCache(),
       })
       expect(instance).to.be.instanceOf(RedisCache)
       expect(instance.client).to.be.instanceOf(redis.RedisClient)
-
     })
 
     it('create with redis client', () => {
@@ -72,7 +70,6 @@ describe('RedisCache', () => {
       expect(instance.client).to.be.instanceOf(redis.RedisClient)
       expect(instance.localCache).to.be.instanceOf(LocalCache)
     })
-
   })
 
   describe('set', () => {
@@ -126,28 +123,33 @@ describe('RedisCache', () => {
     })
 
     it('an array [1,2,"ciao"]', async () => {
-      const value = [1,2,'ciao']
+      const value = [1, 2, 'ciao']
       await subject.set(key, value)
       const v = await subject.get(key)
       expect(v).to.be.deep.equals(value)
     })
 
     it('an array with date [1,2,new Date()]', async () => {
-      const value = [1,2,new Date('2017-10-11')]
+      const value = [1, 2, new Date('2017-10-11')]
       await subject.set(key, value)
       const v = await subject.get(key)
       expect(v).to.be.deep.equals(value)
     })
 
     it('an object', async () => {
-      const value = { foo: 'bar', value: true, tot: 1}
+      const value = { foo: 'bar', value: true, tot: 1 }
       await subject.set(key, value)
       const v = await subject.get(key)
       expect(v).to.be.deep.equals(value)
     })
 
     it('a nested object', async () => {
-      const value = { foo: 'bar', value: true, tot: 1, deep: { a: 'b', now: new Date()}}
+      const value = {
+        foo: 'bar',
+        value: true,
+        tot: 1,
+        deep: { a: 'b', now: new Date() },
+      }
       await subject.set(key, value)
       const v = await subject.get(key)
       expect(v).to.be.deep.equals(value)
@@ -159,7 +161,5 @@ describe('RedisCache', () => {
     })
   })
 
-  describe('del', () => {
-
-  })
+  describe('del', () => {})
 })
