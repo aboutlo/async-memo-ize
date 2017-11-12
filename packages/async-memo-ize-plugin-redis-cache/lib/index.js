@@ -111,7 +111,9 @@ class RedisCache {
     return new Promise((resolve, reject) => {
       this.client.set(...args, (err, reply) => {
         if (err) return reject(err)
-        return reply === 'OK' ? resolve(JSON.parse(value, reviver)) : reject(status)
+        return reply === 'OK'
+          ? resolve(JSON.parse(value, reviver))
+          : reject(status)
       })
     })
   }

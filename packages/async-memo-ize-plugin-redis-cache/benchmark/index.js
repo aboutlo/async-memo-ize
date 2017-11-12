@@ -11,30 +11,32 @@ const debug = logger('')
 const results = []
 const spinner = ora('Running benchmark')
 
-function showResults (benchmarkResults) {
-  const table = new Table({head: ['NAME', 'OPS/SEC', 'RELATIVE MARGIN OF ERROR', 'SAMPLE SIZE']})
-  benchmarkResults.forEach((result) => {
+function showResults(benchmarkResults) {
+  const table = new Table({
+    head: ['NAME', 'OPS/SEC', 'RELATIVE MARGIN OF ERROR', 'SAMPLE SIZE'],
+  })
+  benchmarkResults.forEach(result => {
     table.push([
       result.target.name,
-      result.target.hz.toLocaleString('en-US', {maximumFractionDigits: 0}),
+      result.target.hz.toLocaleString('en-US', { maximumFractionDigits: 0 }),
       `± ${result.target.stats.rme.toFixed(2)}%`,
-      result.target.stats.sample.length
+      result.target.stats.sample.length,
     ])
   })
 
   console.log(table.toString())
 }
 
-function sortDescResults (benchmarkResults) {
-  return benchmarkResults.sort((a, b) => a.target.hz < b.target.hz ? 1 : -1)
+function sortDescResults(benchmarkResults) {
+  return benchmarkResults.sort((a, b) => (a.target.hz < b.target.hz ? 1 : -1))
 }
 
-function onCycle (event) {
+function onCycle(event) {
   results.push(event)
   ora(event.target.name).succeed()
 }
 
-function onComplete (cache) {
+function onComplete(cache) {
   spinner.stop()
   debug.log()
   cache.del('fibonacciAsync,20')
@@ -52,14 +54,14 @@ spinner.start()
 const request = path => axios.get(path)
 const fibNumber = 20
 
-const fibonacci = (n) => {
+const fibonacci = n => {
   return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2)
 }
 
-const fibonacciAsync = async (n) => {
+const fibonacciAsync = async n => {
   return n < 2
     ? n
-    : await fibonacciAsync(n - 1) + await fibonacciAsync(n - 2)
+    : (await fibonacciAsync(n - 1)) + (await fibonacciAsync(n - 2))
 }
 
 const asyncMemoized = asyncMemoize(fibonacciAsync)
@@ -86,24 +88,24 @@ const benchmark = new Benchmark.Suite()
 
 benchmark
   .add(`with redis`, {
-    'defer': true,
-    'fn': async deferred => {
+    defer: true,
+    fn: async deferred => {
       await request('http://localhost:3000/with-redis')
       deferred.resolve()
-    }
+    },
   })
   .add(`without Redis`, {
-    'defer': true,
-    'fn': async deferred => {
-      try{
+    defer: true,
+    fn: async deferred => {
+      try {
         await request('http://localhost:3000/without-redis')
-      }catch(e) {
+      } catch (e) {
         console.log('error', e)
       }
 
       deferred.resolve()
-    }
+    },
   })
   .on('cycle', onCycle)
   .on('complete', onComplete.bind(undefined, redisCache))
-  .run({'async': true})
+  .run({ async: true })

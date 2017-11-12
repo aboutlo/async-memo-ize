@@ -1,4 +1,4 @@
-import {LocalCache} from '../lib'
+import { LocalCache } from '../lib'
 
 describe('LocalCache', function() {
   let subject
@@ -21,7 +21,7 @@ describe('LocalCache', function() {
     })
 
     it('with max size', () => {
-      expect(new LocalCache({max: 5})).to.be.ok
+      expect(new LocalCache({ max: 5 })).to.be.ok
     })
   })
 
@@ -32,7 +32,6 @@ describe('LocalCache', function() {
       await subject.set(key, value)
       const read = await subject.get(key)
       expect(read).to.be.equals(value)
-
     })
   })
 
@@ -42,7 +41,6 @@ describe('LocalCache', function() {
       const key = 'k'
       await subject.set(key, value)
       expect(await subject.size()).to.be.equals(1)
-
     })
   })
 
@@ -53,7 +51,6 @@ describe('LocalCache', function() {
       await subject.set(key, value)
       await subject.clear()
       expect(await subject.size()).to.be.equals(0)
-
     })
   })
 
@@ -61,9 +58,8 @@ describe('LocalCache', function() {
     it('returns all entries', async () => {
       await subject.set('foo', 1)
       await subject.set('bar', 2)
-      const entries = [...await subject.entries()]
+      const entries = [...(await subject.entries())]
       expect(entries).to.be.lengthOf(2)
-
     })
   })
 
@@ -96,5 +92,4 @@ describe('LocalCache', function() {
       expect(v).equals(undefined)
     })
   })
-
 })

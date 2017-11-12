@@ -1,6 +1,19 @@
 {
-	"devDependencies": {
-		"lerna": "^2.0.0",
-		"prettier": "^1.5.3"
-	}
+  "scripts": {
+    "format": "prettier --write ./packages/{async-memo-ize,async-memo-ize-plugin-redis-cache,example}/{lib,test,src}/**/*.js"
+  },
+  "lint-staged": {
+    "linters": {
+      "*.js": [
+        "prettier --write",
+        "git add"
+      ]
+    }
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lerna": "^2.0.0",
+    "lint-staged": "^5.0.0",
+    "prettier": "^1.8.2"
+  }
 }

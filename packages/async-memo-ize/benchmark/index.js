@@ -11,30 +11,32 @@ const debug = logger('')
 const results = []
 const spinner = ora('Running benchmark')
 
-function showResults (benchmarkResults) {
-  const table = new Table({head: ['NAME', 'OPS/SEC', 'RELATIVE MARGIN OF ERROR', 'SAMPLE SIZE']})
-  benchmarkResults.forEach((result) => {
+function showResults(benchmarkResults) {
+  const table = new Table({
+    head: ['NAME', 'OPS/SEC', 'RELATIVE MARGIN OF ERROR', 'SAMPLE SIZE'],
+  })
+  benchmarkResults.forEach(result => {
     table.push([
       result.target.name,
-      result.target.hz.toLocaleString('en-US', {maximumFractionDigits: 0}),
+      result.target.hz.toLocaleString('en-US', { maximumFractionDigits: 0 }),
       `± ${result.target.stats.rme.toFixed(2)}%`,
-      result.target.stats.sample.length
+      result.target.stats.sample.length,
     ])
   })
 
   console.log(table.toString())
 }
 
-function sortDescResults (benchmarkResults) {
-  return benchmarkResults.sort((a, b) => a.target.hz < b.target.hz ? 1 : -1)
+function sortDescResults(benchmarkResults) {
+  return benchmarkResults.sort((a, b) => (a.target.hz < b.target.hz ? 1 : -1))
 }
 
-function onCycle (event) {
+function onCycle(event) {
   results.push(event)
   ora(event.target.name).succeed()
 }
 
-function onComplete () {
+function onComplete() {
   spinner.stop()
   debug.log()
 
@@ -51,17 +53,17 @@ spinner.start()
 const request = path => axios.get(path)
 const fibNumber = 20
 
-const fibonacci = (n) => {
+const fibonacci = n => {
   return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2)
 }
 
-const fibonacciAsync = async (n) => {
+const fibonacciAsync = async n => {
   return n < 2
     ? n
-    : await fibonacciAsync(n - 1) + await fibonacciAsync(n - 2)
+    : (await fibonacciAsync(n - 1)) + (await fibonacciAsync(n - 2))
 }
 
-const asyncMemoizedWithMemoizee = memoizee(fibonacciAsync, { promise: 'then' });
+const asyncMemoizedWithMemoizee = memoizee(fibonacciAsync, { promise: 'then' })
 const asyncMemoized = asyncMemoize(fibonacciAsync)
 
 const app1 = express()
@@ -87,26 +89,26 @@ const benchmark = new Benchmark.Suite()
 
 benchmark
   .add('vanilla async', {
-    'defer': true,
-    'fn': async deferred => {
+    defer: true,
+    fn: async deferred => {
       await request('http://localhost:3000/vanilla')
       deferred.resolve()
-    }
+    },
   })
   .add(`Memoizee`, {
-    'defer': true,
-    'fn': async deferred => {
+    defer: true,
+    fn: async deferred => {
       await request('http://localhost:3000/memoizee')
       deferred.resolve()
-    }
+    },
   })
   .add(`async-memo-ize`, {
-    'defer': true,
-    'fn': async deferred => {
+    defer: true,
+    fn: async deferred => {
       await request('http://localhost:3000/async-memo-ize')
       deferred.resolve()
-    }
+    },
   })
   .on('cycle', onCycle)
   .on('complete', onComplete)
-  .run({'async': true})
+  .run({ async: true })
