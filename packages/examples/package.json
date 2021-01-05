@@ -9,7 +9,7 @@
   "dependencies": {
     "async-memo-ize": "^0.2.0",
     "async-memo-ize-plugin-redis-cache": "^0.1.8",
-    "axios": "^0.16.2"
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
