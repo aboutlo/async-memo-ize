@@ -147,16 +147,16 @@ async-each@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
 
-async-memo-ize-plugin-redis-cache@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/async-memo-ize-plugin-redis-cache/-/async-memo-ize-plugin-redis-cache-0.1.7.tgz#98509ff27fbcd14a464cd74382019030d6a4f00a"
+async-memo-ize-plugin-redis-cache@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/async-memo-ize-plugin-redis-cache/-/async-memo-ize-plugin-redis-cache-0.1.8.tgz#c4f8811666ef82fc8a7cd85011781343e5901cec"
   dependencies:
-    async-memo-ize "^0.1.5"
+    async-memo-ize "^0.2.0"
     redis "^2.4.2"
 
-async-memo-ize@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/async-memo-ize/-/async-memo-ize-0.1.5.tgz#bfdef53847baa3041753bb53b43ca437bb447d96"
+async-memo-ize@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/async-memo-ize/-/async-memo-ize-0.2.0.tgz#9472ee90243148d30bb117d60b23c061ba323585"
   dependencies:
     lru_map "^0.3.3"
 
@@ -3585,8 +3585,8 @@ xtend@^4.0.0:
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.1.tgz#a5c6d532be656e23db820efb943a1f04998d63af"
 
 y18n@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.2.tgz#85c901bd6470ce71fc4bb723ad209b70f7f28696"
 
 yallist@^2.1.2:
   version "2.1.2"
