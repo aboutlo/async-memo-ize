@@ -90,9 +90,9 @@ async-each@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
 
-async-memo-ize@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/async-memo-ize/-/async-memo-ize-0.1.5.tgz#bfdef53847baa3041753bb53b43ca437bb447d96"
+async-memo-ize@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/async-memo-ize/-/async-memo-ize-0.2.0.tgz#9472ee90243148d30bb117d60b23c061ba323585"
   dependencies:
     lru_map "^0.3.3"
 
@@ -1833,8 +1833,8 @@ path-to-regexp@^1.7.0:
     isarray "0.0.1"
 
 pathval@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/pathval/-/pathval-1.1.0.tgz#b942e6d4bde653005ef6b71361def8727d0645e0"
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/pathval/-/pathval-1.1.1.tgz#8534e77a77ce7ac5a2512ea21e0fdb8fcf6c3d8d"
 
 performance-now@^0.2.0:
   version "0.2.0"
